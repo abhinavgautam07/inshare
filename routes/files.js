@@ -3,37 +3,22 @@ const multer = require('multer');
 const path = require('path');
 const File = require('../models/file');
 const { v4: uuidv4 } = require('uuid');
-const { genrateError,parseError} = require("../utils")
+const { genrateError, parseError } = require("../utils")
+
 let storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  
-  filename: (req, file, cb) => {
-      const uniqueName = ``;
-    cb(null, new Date().toISOString() + file.originalname);
-  }
+    destination: (req, file, cb) => cb(null, 'uploads/') ,
+    filename: (req, file, cb) => {
+        const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+              cb(null, uniqueName)
+    } ,
 });
 
+let upload = multer({ storage, limits:{ fileSize: 1000000 * 100 }, });//100mb
 
-const fileFilter = (req, file, cb) => {
-  
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-    //accept the file
-    cb(null, true);
-  } else {
+router.post('/',upload.single('myfile'), async (req, res) => {
 
-    //reject the file
-    cb(null, false);
-  }
-};
-
-let upload = multer({ storage, limits: { fileSize: 1000000 * 100 },fileFilter:fileFilter}); //100mb
-
-
-
-
-router.post('/',upload.single('myFile'), async (req, res) => {
-  // console.log(req.file);
   try {
+    console.log(req.body);
       if (!req.file) {
         throw new Error(genrateError(400,'you must upload a file'));
     }

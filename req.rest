@@ -1,5 +1,5 @@
 POST http://localhost:80/api/files/ HTTP/1.1
-Content-Type: application/json
+Content-Type: application/application/json
 
 {
     "name" : "left"

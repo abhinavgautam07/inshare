@@ -8,11 +8,6 @@ const fileSchema = new Schema({
     uuid: { type: String, required: true },
     sender: { type: String, required: false },
     receiver: { type: String, required: false },
-    expireAt: {
-        type: Date,
-        default: Date.now,
-        index: { expires: '1d' },
-      },
 }, { timestamps: true });
 
 module.exports = mongoose.model('File', fileSchema);
